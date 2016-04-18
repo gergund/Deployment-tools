@@ -12,7 +12,7 @@ env.user   = "jenkins"
 repo = 'git@github.corp.magento.com:magento2/magento2ce.git'
 base_path = '/var/www/deploy/'
 #env.sudo_user = 'jenkins'
-git_tag = '2.0.3'
+git_tag = '2.0.4'
 ###########
 
 def uptime():
@@ -72,3 +72,14 @@ def rollback(version):
 	if exists(back_path, use_sudo=True):
 		sudo('rm -Rf ' + current_path)
 		sudo('ln -s ' + back_path + ' ' + current_path)
+
+def clean(amount):
+	versions_path = base_path + 'versions/'
+	amount = int(amount)
+	versions_amount = int(sudo('cd ' + versions_path + ' && ls -l | wc -l'))
+	count = int(versions_amount) - int(amount)
+	if ( count > 1 ):
+		for i in range(1, count):
+			if ( (versions_amount - amount) > 1 ):
+				to_rm = sudo('cd ' + versions_path + ' && ls -la | head -4 | tail -fn 1 | awk \'{print $9}\' ')
+				sudo('rm -Rf ' + versions_path + '/' + to_rm)
