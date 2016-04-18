@@ -61,3 +61,14 @@ def install():
 		with cd(path):
 			sudo('git clone ' + repo + ' .')
 			update(path)
+
+def rollback(version):
+	current_path =  base_path + 'current'
+	if (version == 'latest'):
+		latest = sudo('cd ' +  base_path + 'versions/ && ls -la | tail -fn 2 | head -1 | awk \'{print $9}\' ')
+		back_path = base_path + 'versions/' + latest
+	else:
+		back_path = base_path + 'versions/' + version
+	if exists(back_path, use_sudo=True):
+		sudo('rm -Rf ' + current_path)
+		sudo('ln -s ' + back_path + ' ' + current_path)
