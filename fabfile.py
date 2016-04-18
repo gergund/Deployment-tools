@@ -12,7 +12,7 @@ env.user   = "jenkins"
 repo = 'git@github.corp.magento.com:magento2/magento2ce.git'
 base_path = '/var/www/deploy/'
 #env.sudo_user = 'jenkins'
-git_tag = '2.0.4'
+git_tag = '2.0.3'
 ###########
 
 def uptime():
