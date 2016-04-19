@@ -28,10 +28,16 @@ def init_shared():
 		sudo('mkdir -p ' + shared_path)
 	if not exists(media_path, use_sudo=True):
 		sudo('mkdir -p ' + media_path)
+		sudo('chmod 770 ' + media_path)
+		sudo('chown apache:apache ' + media_path)
 	if not exists(var_path, use_sudo=True):
 		sudo('mkdir -p ' + var_path)
+		sudo('chmod 770 ' + var_path)
+                sudo('chown apache:apache ' + var_path)
 	if not exists(env_path, use_sudo=True):
                 sudo('mkdir -p ' + env_path)
+		sudo('chmod 770 ' + env_path)
+                sudo('chown apache:apache ' + env_path)
 
 def deploy():
 	timestamp = run('date +%s')
@@ -40,9 +46,17 @@ def deploy():
 	current_path =  base_path + 'current'
 	sudo('mkdir -p ' + versions_path)
 	sudo('cp -r ' + release_path + '/* ' + versions_path)
+	with cd(versions_path):
+		sudo('rm -Rf ' + versions_path + 'media')
+		sudo('ln -s ../../shared/media')
+		sudo('rm -Rf ' + versions_path + 'var')
+		sudo('ln -s ../../shared/var')
+		sudo('cd app/etc/ && ln -s ../../../shared/env/env.php')
 	with cd(base_path):
 		sudo('rm -Rf ' + current_path)
 		sudo('ln -s ' + versions_path + ' ' + current_path)
+	sudo('service php-fpm reload')
+        sudo('service nginx reload')
 
 def update(path):
 	with cd(path):
