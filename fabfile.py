@@ -20,6 +20,7 @@ def uptime():
 	run("uptime")
 
 def init_shared():
+	""" Initial step for directory structure creation """
 	shared_path = base_path + 'shared/'
 	media_path = base_path + 'shared/'  +'media/'
 	var_path = base_path + 'shared/' + 'var/'
@@ -40,6 +41,7 @@ def init_shared():
                 sudo('chown apache:apache ' + env_path)
 
 def deploy():
+	""" Deploy of current version """
 	timestamp = run('date +%s')
 	versions_path = base_path + 'versions/' + timestamp + '/'
 	release_path = base_path  + 'releases/' + git_tag + '/'
@@ -59,6 +61,7 @@ def deploy():
         sudo('service nginx reload')
 
 def update(path):
+	""" Check git tag and branch changes """
 	with cd(path):
 		sudo('git checkout tags/' + git_tag + ' -b ' + git_tag, warn_only=True)
 		sudo('git branch -a | grep ' + git_tag, warn_only=True)
@@ -66,6 +69,7 @@ def update(path):
 	deploy()
 
 def install():
+	""" Git init step to clone repo """
 	init_shared()
 	path = base_path  + 'releases/' + git_tag + '/'
 	if exists(path, use_sudo=True):
@@ -77,6 +81,7 @@ def install():
 			update(path)
 
 def rollback(version):
+	""" Rollback version """
 	current_path =  base_path + 'current'
 	if (version == 'latest'):
 		latest = sudo('cd ' +  base_path + 'versions/ && ls -la | tail -fn 2 | head -1 | awk \'{print $9}\' ')
@@ -86,8 +91,11 @@ def rollback(version):
 	if exists(back_path, use_sudo=True):
 		sudo('rm -Rf ' + current_path)
 		sudo('ln -s ' + back_path + ' ' + current_path)
+	sudo('service php-fpm reload')
+        sudo('service nginx reload')
 
 def clean(amount):
+	""" Clean oldest versions and leave latest by argument """
 	versions_path = base_path + 'versions/'
 	amount = int(amount)
 	versions_amount = int(sudo('cd ' + versions_path + ' && ls -l | wc -l'))
