@@ -61,7 +61,8 @@ deploy
  New version added and switched sym link
 
 It's possible to rollback version, by 
-Usage: #fab rollback:lastest or fab rollback:<version number>
+
+>Usage: #fab rollback:lastest or fab rollback:<version number>
 
 Example:
 
@@ -81,7 +82,7 @@ deploy
 
 To keep project size in health you could run clean function
 
->Usage: #fab clean:<amount of latest version to leave>
+>Usage: #fab clean:\<amount of latest version to leave\>
 
 Example: #fab clean:2
 
