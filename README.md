@@ -62,11 +62,12 @@ deploy
 
 It's possible to rollback version, by 
 
->Usage: #fab rollback:lastest or fab rollback:\<version number\>
+>Usage: #fab rollback:latest or fab rollback:\<version number\>
 
 Example:
 
 ```
+#fab rollback:latest
 deploy
 |-- current -> /var/www/deploy/versions/1461160110
 |-- releases
@@ -84,10 +85,11 @@ To keep project size in health you could run clean function
 
 >Usage: #fab clean:\<amount of latest version to leave\>
 
-Example: #fab clean:2
+Example:
 
 ```
-[root@web01 www]# tree deploy  -d -L 2
+#fab clean:2
+
 deploy
 |-- current -> /var/www/deploy/versions/1461161018/
 |-- releases
@@ -100,5 +102,3 @@ deploy
     |-- 1461161006
     `-- 1461161018
 ```
-
-Latest 2 version listed
