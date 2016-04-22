@@ -62,7 +62,7 @@ deploy
 
 It's possible to rollback version, by 
 
->Usage: #fab rollback:lastest or fab rollback:<version number>
+>Usage: #fab rollback:lastest or fab rollback:\<version number\>
 
 Example:
 
